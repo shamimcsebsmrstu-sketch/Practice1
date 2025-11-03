@@ -62,8 +62,9 @@ class ProductController extends Controller
     }
 
     // GET /api/product/{id}
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::findOrFail($id);
         return response()->json($product);
     }
 
