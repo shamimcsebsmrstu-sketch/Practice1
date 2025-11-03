@@ -23,7 +23,7 @@ class ProductController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price'=> 'nullable|numeric',
+            'price'=> 'numeric',
         ];
 
         if ($request->hasFile('image')) {
@@ -69,12 +69,14 @@ class ProductController extends Controller
     }
 
     // PUT/PATCH /api/product/{id}
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
+        $product = Product::findOrFail($id);
         // Conditional validation for update
         $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'price' => 'numeric'
         ];
         if ($request->hasFile('image')) {
             $rules['image'] = 'image|max:5120';
@@ -115,7 +117,10 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return response()->json($product);
+        return response()->json([
+            'message' => 'Product updated successfully',
+            'product' => $product
+        ]);
     }
 
     // DELETE /api/product/{id}
