@@ -119,13 +119,14 @@ class ProductController extends Controller
     }
 
     // DELETE /api/product/{id}
-    public function destroy(Product $product)
+    public function destroy($id)
     {
+        $product = Product::findOrFail($id);
         if ($product->image && !filter_var($product->image, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($product->image)) {
             Storage::disk('public')->delete($product->image);
         }
         $product->delete();
 
-        return response()->json(['message' => 'Deleted']);
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 }
